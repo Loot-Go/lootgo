@@ -1,4 +1,4 @@
-import DynamicProvider from "./DynamicProvider";
+import DynamicProvider from "@/providers/DynamicProvider";
 import Footer from "./footer";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
