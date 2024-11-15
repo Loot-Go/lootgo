@@ -5,11 +5,19 @@ import {
   DynamicConnectButton,
   useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
-import { useRef } from "react";
+import { signOut } from "next-auth/react";
+import { useRef, useState } from "react";
+import { ImSpinner2 } from "react-icons/im";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
   const { sdkHasLoaded, user, handleLogOut } = useDynamicContext();
   const btnRef = useRef<HTMLDivElement>(null);
+
+  const signOutFn = async () => {
+    await handleLogOut();
+    signOut();
+  };
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-y-28 bg-[#121212] text-white">
@@ -24,29 +32,29 @@ export default function LoginPage() {
         </DynamicConnectButton>
       </div>
 
-      {!user ? (
-        <Button
-          style={{
-            background: "linear-gradient(180deg, #D5FC44 0%, #A9D600 100%)",
-          }}
-          className="flex h-auto w-3/4 rounded-full py-3 text-2xl font-bold text-black"
-          disabled={!sdkHasLoaded}
-          onClick={() => btnRef.current?.click()}
-        >
-          Sign up
-        </Button>
-      ) : (
-        <Button
-          style={{
-            background: "linear-gradient(180deg, #D5FC44 0%, #A9D600 100%)",
-          }}
-          className="flex h-auto w-3/4 rounded-full py-3 text-2xl font-bold text-black"
-          disabled={!sdkHasLoaded}
-          onClick={() => handleLogOut()}
-        >
-          Sign out
-        </Button>
-      )}
+      <Button
+        style={{
+          background: "linear-gradient(180deg, #D5FC44 0%, #A9D600 100%)",
+        }}
+        size={"icon"}
+        className="relative h-auto w-3/4 overflow-hidden rounded-full py-3 text-2xl font-bold text-black"
+        disabled={!sdkHasLoaded || loading}
+        onClick={() => {
+          if (!user) {
+            setLoading(true);
+            btnRef.current?.click();
+          } else {
+            signOutFn();
+          }
+        }}
+      >
+        {!user ? "Sign up" : "Sign out"}
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70">
+            <ImSpinner2 className="animate-spin" size={30} />
+          </div>
+        )}
+      </Button>
     </div>
   );
 }
