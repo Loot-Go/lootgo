@@ -2,10 +2,7 @@
 
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
-import {
-  DynamicContextProvider,
-  DynamicWidget,
-} from "@dynamic-labs/sdk-react-core";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
@@ -36,10 +33,7 @@ export default function DynamicProvider({
     >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <DynamicWagmiConnector>
-            <DynamicWidget />
-            {children}
-          </DynamicWagmiConnector>
+          <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
         </QueryClientProvider>
       </WagmiProvider>
     </DynamicContextProvider>
