@@ -1,16 +1,16 @@
 "use client";
 
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import {
   DynamicContextProvider,
   DynamicWidget,
 } from "@dynamic-labs/sdk-react-core";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
-import { createConfig, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
 import { mainnet } from "viem/chains";
-import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-import { FlowWalletConnectors } from "@dynamic-labs/flow";
+import { createConfig, WagmiProvider } from "wagmi";
 
 const config = createConfig({
   chains: [mainnet],
