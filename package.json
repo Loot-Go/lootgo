@@ -33,7 +33,7 @@
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
-    "ethers": "^6.1.0",
+    "ethers": "^5.7.2",
     "limit-order": "link:@1inch/fusion-sdk/limit-order",
     "lucide-react": "^0.459.0",
     "mapkit-react": "^1.15.2",
