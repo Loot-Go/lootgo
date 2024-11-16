@@ -9,15 +9,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
-
 const chartConfig = {
   desktop: {
     label: "Desktop",
@@ -25,12 +16,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PriceChart() {
+export function PriceChart({ data }: { data: Record<string, number>[] }) {
   return (
     <ChartContainer config={chartConfig}>
       <AreaChart
         accessibilityLayer
-        data={chartData}
+        data={data}
         margin={{
           left: 12,
           right: 12,
@@ -38,18 +29,18 @@ export function PriceChart() {
       >
         <CartesianGrid vertical={false} horizontal={false} />
         <XAxis
-          dataKey="month"
+          dataKey="date"
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tickFormatter={(value) => value.slice(0, 3)}
+          tickFormatter={(value) => value}
         />
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent indicator="dot" hideLabel />}
         />
         <Area
-          dataKey="desktop"
+          dataKey="price"
           type="linear"
           fill="var(--color-desktop)"
           fillOpacity={0.4}

@@ -5,7 +5,7 @@ import Percentage from "@/components/market/percentage";
 
 const ChestPage = () => {
   return (
-    <div className={`min-h-screen bg-[#000] text-white`}>
+    <div className={`min-h-screen bg-[#121212] text-white`}>
       <div className="grid place-items-center pt-5 text-center">
         <div className="font-bold">Market</div>
 
@@ -28,9 +28,6 @@ const ChestPage = () => {
         <p className="mt-6 pl-2 text-left">My coins 😎</p>
 
         <div className="mt-5 space-y-5 px-2">
-          <CoinCard />
-          <CoinCard />
-          <CoinCard />
           <CoinCard />
         </div>
       </div>
