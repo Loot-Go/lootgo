@@ -14,6 +14,9 @@ dependencies:
   '@dynamic-labs/ethereum':
     specifier: ^3.6.2
     version: 3.6.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.45)
+  '@dynamic-labs/ethers-v6':
+    specifier: ^3.6.3
+    version: 3.6.3(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(@dynamic-labs/utils@3.6.3)(@dynamic-labs/wallet-book@3.6.3)(ethers@6.13.4)(eventemitter3@5.0.1)(viem@2.21.45)
   '@dynamic-labs/flow':
     specifier: ^3.6.2
     version: 3.6.3(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(eventemitter3@5.0.1)(google-protobuf@3.21.4)(react-dom@18.3.1)(react@18.3.1)
@@ -165,6 +168,10 @@ devDependencies:
     version: 5.6.3
 
 packages:
+
+  /@adraffy/ens-normalize@1.10.1:
+    resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
+    dev: false
 
   /@adraffy/ens-normalize@1.11.0:
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
@@ -1951,6 +1958,26 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@dynamic-labs/ethers-v6@3.6.3(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(@dynamic-labs/utils@3.6.3)(@dynamic-labs/wallet-book@3.6.3)(ethers@6.13.4)(eventemitter3@5.0.1)(viem@2.21.45):
+    resolution: {integrity: sha512-N3DhcIDJLmGdvM2E7m6ShCiw6MLSImXanvH0MsR0Xx465ABTixsj/S1+R/OgY3fOeNpSQzOHiKF3lcyHn3Veqg==}
+    peerDependencies:
+      ethers: ^6
+      viem: ^2.7.6
+    dependencies:
+      '@dynamic-labs/assert-package-version': 3.6.3(eventemitter3@5.0.1)
+      '@dynamic-labs/ethereum-core': 3.6.3(@dynamic-labs/assert-package-version@3.6.3)(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(@dynamic-labs/utils@3.6.3)(@dynamic-labs/wallet-book@3.6.3)(@dynamic-labs/wallet-connector-core@3.6.3)(viem@2.21.45)
+      '@dynamic-labs/wallet-connector-core': 3.6.3(@dynamic-labs/assert-package-version@3.6.3)(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(@dynamic-labs/utils@3.6.3)(@dynamic-labs/wallet-book@3.6.3)(eventemitter3@5.0.1)
+      ethers: 6.13.4
+      viem: 2.21.45(typescript@5.6.3)
+    transitivePeerDependencies:
+      - '@dynamic-labs/logger'
+      - '@dynamic-labs/rpc-providers'
+      - '@dynamic-labs/types'
+      - '@dynamic-labs/utils'
+      - '@dynamic-labs/wallet-book'
+      - eventemitter3
+    dev: false
+
   /@dynamic-labs/flow@3.6.3(@dynamic-labs/logger@3.6.3)(@dynamic-labs/rpc-providers@3.6.3)(@dynamic-labs/types@3.6.3)(eventemitter3@5.0.1)(google-protobuf@3.21.4)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-bMW9N9PO/hL/CrI370meBv1b645ZBK76c2hSo1nrQyZqAB/apWaUtbBx4FcCW7Vw2aLX5by1ax3saCnZZiCquA==}
     dependencies:
@@ -3110,6 +3137,12 @@ packages:
     engines: {node: ^14.21.3 || >=16}
     dev: false
 
+  /@noble/curves@1.2.0:
+    resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
+    dependencies:
+      '@noble/hashes': 1.3.2
+    dev: false
+
   /@noble/curves@1.4.0:
     resolution: {integrity: sha512-p+4cb332SFCrReJkCYe8Xzm0OWi4Jji5jVdIZRL/PmacmDkFNw6MrrV+gGpiPxLHbV+zKFRywUWbaseT+tZRXg==}
     dependencies:
@@ -3127,6 +3160,11 @@ packages:
     engines: {node: ^14.21.3 || >=16}
     dependencies:
       '@noble/hashes': 1.5.0
+    dev: false
+
+  /@noble/hashes@1.3.2:
+    resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
+    engines: {node: '>= 16'}
     dev: false
 
   /@noble/hashes@1.4.0:
@@ -5265,6 +5303,12 @@ packages:
     dependencies:
       undici-types: 6.19.8
 
+  /@types/node@22.7.5:
+    resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
+    dependencies:
+      undici-types: 6.19.8
+    dev: false
+
   /@types/prop-types@15.7.13:
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
@@ -6328,6 +6372,10 @@ packages:
     resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  /aes-js@4.0.0-beta.5:
+    resolution: {integrity: sha512-G965FqalsNyrPqgEGON7nIx1e/OVENSgiEIzyC63haUMuvNnwIgIjMs52hlTCKhkBny7A2ORNlfY9Zu+jmGk1Q==}
+    dev: false
 
   /ajv-keywords@3.5.2(ajv@6.12.6):
     resolution: {integrity: sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==}
@@ -8270,6 +8318,22 @@ packages:
       '@noble/hashes': 1.4.0
       '@scure/bip32': 1.4.0
       '@scure/bip39': 1.3.0
+    dev: false
+
+  /ethers@6.13.4:
+    resolution: {integrity: sha512-21YtnZVg4/zKkCQPjrDj38B1r4nQvTZLopUGMLQ1ePU2zV/joCfDC3t3iKQjWRzjjjbzR+mdAIoikeBRNkdllA==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.1
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.2
+      '@types/node': 22.7.5
+      aes-js: 4.0.0-beta.5
+      tslib: 2.7.0
+      ws: 8.17.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /event-target-shim@5.0.1:
@@ -13028,6 +13092,10 @@ packages:
 
   /tslib@2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
+    dev: false
+
+  /tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
     dev: false
 
   /tslib@2.8.1:
