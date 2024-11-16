@@ -1,16 +1,17 @@
 "use client";
 
+import AccountWrapper from "@/components/common/account-wrapper";
 import ChartOption from "@/components/market/chart-option";
 import Percentage from "@/components/market/percentage";
 import { PriceChart } from "@/components/market/price-chart";
 import { formatDate } from "@/lib/helpers";
 
 import { getSigner } from "@dynamic-labs/ethers-v6";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import {} from "@dynamic-labs/sdk-react";
+import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
-import { FC, useEffect, useState } from "react";
-
+import { FC, useState } from "react";
 import CountUp from "react-countup";
 
 interface DetailsPageProps {
@@ -21,6 +22,8 @@ interface DetailsPageProps {
 
 const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
   const coinId = params.id;
+  const isLoggedIn = useIsLoggedIn();
+
   const { primaryWallet } = useDynamicContext();
 
   const [activeChart, setActiveChart] = useState("7d");
@@ -47,13 +50,12 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
     );
   };
 
-  useEffect(() => {
-    getChartData();
-  }, [activeChart]);
-
   const buyHandler = async () => {
     if (primaryWallet) {
       const signer = await getSigner(primaryWallet);
+      console.log("signer");
+
+      console.log(signer);
 
       if (signer) {
         // do the tx?
@@ -62,68 +64,70 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#000] text-white">
-      <div className="relative">
-        <Link href="/market" className="absolute left-5 top-6">
-          <ArrowLeftIcon className="h-4 w-4 cursor-pointer" />
-        </Link>
-      </div>
-      <div className="my-10 grid place-items-center pt-20">
-        <img
-          src="https://assets.coingecko.com/coins/images/39251/standard/miggles.jpg?1721283044"
-          className="h-[40px] w-[40px] rounded-full"
-          alt=""
-        />
-        <b className="mt-4 text-2xl font-bold">
-          $ <CountUp duration={1} className="counter" end={3260.035} />
-        </b>
-        <Percentage percentage="91%" />
-      </div>
-
-      <div className="mb-20">
-        <div className="scale-105 overflow-hidden transition-all duration-300">
-          <PriceChart data={chartValues} />
+    <AccountWrapper status={isLoggedIn}>
+      <div className="flex min-h-screen flex-col bg-[#000] text-white">
+        <div className="relative">
+          <Link href="/market" className="absolute left-5 top-6">
+            <ArrowLeftIcon className="h-4 w-4 cursor-pointer" />
+          </Link>
+        </div>
+        <div className="my-10 grid place-items-center pt-20">
+          <img
+            src="https://assets.coingecko.com/coins/images/39251/standard/miggles.jpg?1721283044"
+            className="h-[40px] w-[40px] rounded-full"
+            alt=""
+          />
+          <b className="mt-4 text-2xl font-bold">
+            $ <CountUp duration={1} className="counter" end={3260.035} />
+          </b>
+          <Percentage percentage="91%" />
         </div>
 
-        <div className="mt-5 flex items-center justify-center space-x-2">
-          <ChartOption
-            title="7d"
-            active={activeChart === "7d"}
-            onClick={() => setActiveChart("7d")}
-          />
-          <ChartOption
-            title="14d"
-            active={activeChart === "14d"}
-            onClick={() => setActiveChart("14d")}
-          />
-          <ChartOption
-            title="30d"
-            active={activeChart === "30d"}
-            onClick={() => setActiveChart("30d")}
-          />
-          <ChartOption
-            title="1y"
-            active={activeChart === "364y"}
-            onClick={() => setActiveChart("364y")}
-          />
+        <div className="mb-20">
+          <div className="scale-105 overflow-hidden transition-all duration-300">
+            <PriceChart data={chartValues} />
+          </div>
+
+          <div className="mt-5 flex items-center justify-center space-x-2">
+            <ChartOption
+              title="7d"
+              active={activeChart === "7d"}
+              onClick={() => setActiveChart("7d")}
+            />
+            <ChartOption
+              title="14d"
+              active={activeChart === "14d"}
+              onClick={() => setActiveChart("14d")}
+            />
+            <ChartOption
+              title="30d"
+              active={activeChart === "30d"}
+              onClick={() => setActiveChart("30d")}
+            />
+            <ChartOption
+              title="1y"
+              active={activeChart === "364y"}
+              onClick={() => setActiveChart("364y")}
+            />
+          </div>
+        </div>
+
+        <div className="mt-28 flex space-x-2 bg-[#000] px-5 pb-10">
+          <button
+            onClick={buyHandler}
+            className="flex-1 rounded-xl bg-[#F15950] px-4 py-3 font-bold"
+          >
+            BUY
+          </button>
+          <button
+            onClick={buyHandler}
+            className="flex-1 rounded-xl bg-[#10DC78] px-4 py-3 font-bold"
+          >
+            SELL
+          </button>
         </div>
       </div>
-
-      <div className="mt-28 flex space-x-2 bg-[#000] px-5 pb-10">
-        <button
-          onClick={buyHandler}
-          className="flex-1 rounded-xl bg-[#F15950] px-4 py-3 font-bold"
-        >
-          BUY
-        </button>
-        <button
-          onClick={buyHandler}
-          className="flex-1 rounded-xl bg-[#10DC78] px-4 py-3 font-bold"
-        >
-          SELL
-        </button>
-      </div>
-    </div>
+    </AccountWrapper>
   );
 };
 
