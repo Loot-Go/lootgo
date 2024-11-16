@@ -52,10 +52,12 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
   }, [activeChart]);
 
   const buyHandler = async () => {
-    const signer = await getSigner(primaryWallet);
+    if (primaryWallet) {
+      const signer = await getSigner(primaryWallet);
 
-    if (signer) {
-      // do the tx?
+      if (signer) {
+        // do the tx?
+      }
     }
   };
 
