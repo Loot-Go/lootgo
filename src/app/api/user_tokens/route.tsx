@@ -45,8 +45,6 @@ export async function GET(req: Request) {
           const coinGeckoResponse = await axios.get(coinGeckoUrl);
           const tokenMetadata = coinGeckoResponse.data;
 
-          console.log(tokenMetadata);
-
           return {
             contractAddress,
             quantity: balances[contractAddress],
