@@ -26,11 +26,10 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
     const fromTimestamp =
       new Date().getTime() -
       Number(activeChart.replace("d", "")) * 24 * 60 * 60 * 1000;
+
     const toTimestamp = new Date().getTime();
 
-    const result = await fetch(
-      `/api/chart?id=${coinId}&from=${fromTimestamp * 1000}&to=${toTimestamp * 1000}`,
-    );
+    const result = await fetch(`/api/chart?id=${coinId}`);
 
     const data = await result.json();
 
@@ -68,7 +67,9 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
       </div>
 
       <div className="mb-20">
-        <PriceChart data={chartValues} />
+        <div className="scale-105 overflow-hidden transition-all duration-300">
+          <PriceChart data={chartValues} />
+        </div>
 
         <div className="mt-5 flex items-center justify-center space-x-2">
           <ChartOption

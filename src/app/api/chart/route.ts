@@ -3,8 +3,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
     const vsCurrency = searchParams.get("vs_currency") || "usd"; // Default to 'usd'
-    const from = searchParams.get("from");
-    const to = searchParams.get("to");
+    const from = searchParams.get("from") ?? "1731629930";
+    const to = searchParams.get("to") ?? "1731729930";
 
     if (!from || !to) {
       return Response.json(

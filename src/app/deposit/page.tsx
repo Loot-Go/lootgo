@@ -9,7 +9,7 @@ import { useState } from "react";
 const DepositPage = () => {
   const userWallets = useUserWallets();
   const [amount, setAmount] = useState(20);
-  const projectId = process.env.NEXT_PUBLIC_CDP_API_KEY!;
+  const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID!;
   const userWallet = userWallets[0]?.address;
 
   const onrampBuyUrl = userWallet
