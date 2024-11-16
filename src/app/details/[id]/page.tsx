@@ -8,6 +8,8 @@ import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 
+import CountUp from "react-countup";
+
 interface DetailsPageProps {
   params: {
     id: string;
@@ -27,12 +29,10 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
     const toTimestamp = new Date().getTime();
 
     const result = await fetch(
-      `/api/chart?id=${coinId}&from=${fromTimestamp}&to=${toTimestamp}`,
+      `/api/chart?id=${coinId}&from=${fromTimestamp * 1000}&to=${toTimestamp * 1000}`,
     );
 
     const data = await result.json();
-
-    console.log(data);
 
     setChartValues(
       data.map((price: [number, number]) => {
@@ -61,7 +61,9 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
           className="h-[40px] w-[40px] rounded-full"
           alt=""
         />
-        <b className="mt-4 text-2xl font-bold">$3,260.62</b>
+        <b className="mt-4 text-2xl font-bold">
+          $ <CountUp duration={1} className="counter" end={3260.035} />
+        </b>
         <Percentage percentage="91%" />
       </div>
 
