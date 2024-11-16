@@ -4,6 +4,8 @@ import ChartOption from "@/components/market/chart-option";
 import Percentage from "@/components/market/percentage";
 import { PriceChart } from "@/components/market/price-chart";
 import { formatDate } from "@/lib/helpers";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 
 interface DetailsPageProps {
@@ -48,10 +50,15 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#000] text-white">
-      <div className="my-10 grid place-items-center">
+      <div className="relative">
+        <Link href="/market" className="absolute left-5 top-6">
+          <ArrowLeftIcon className="h-4 w-4 cursor-pointer" />
+        </Link>
+      </div>
+      <div className="my-10 grid place-items-center pt-20">
         <img
           src="https://assets.coingecko.com/coins/images/39251/standard/miggles.jpg?1721283044"
-          className="h-[40px] w-[40px]"
+          className="h-[40px] w-[40px] rounded-full"
           alt=""
         />
         <b className="mt-4 text-2xl font-bold">$3,260.62</b>

@@ -2,6 +2,7 @@
 
 import DynamicProvider from "@/providers/DynamicProvider";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Toaster } from "sonner";
 import Footer from "./footer";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -15,10 +16,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <section
         className={` ${collected ? "bg-[#FF9900]" : ""} ${pathname === "/chest" && !collected ? "bg-[#EAA928]" : ""} bg-[#121212] text-white`}
       >
-        <main className="mx-auto flex min-h-[100svh] max-w-md flex-col bg-[#000] pb-[calc(78px+env(safe-area-inset-bottom))] shadow shadow-white">
+        <main className="mx-auto flex min-h-[100svh] max-w-md flex-col pb-[calc(78px+env(safe-area-inset-bottom))]">
           {children}
         </main>
-        <Footer />
+
+        {!["/chest", "/login"].includes(pathname) && <Footer />}
+
+        <Toaster position="top-center" />
       </section>
     </DynamicProvider>
   );

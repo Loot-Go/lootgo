@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.37.3",
+    "@coinbase/onchainkit": "^0.35.5",
     "@dynamic-labs/ethereum": "^3.6.2",
     "@dynamic-labs/flow": "^3.6.2",
     "@dynamic-labs/sdk-react-core": "^3.6.2",
