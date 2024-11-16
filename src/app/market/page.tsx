@@ -1,6 +1,7 @@
 "use client";
 
 import AccountWrapper from "@/components/common/account-wrapper";
+
 import CoinCard from "@/components/market/coin-card";
 import Percentage from "@/components/market/percentage";
 import Transaction from "@/components/market/transactions";
@@ -209,6 +210,14 @@ const MarketPage = () => {
       setIsMemeCoinLoading(false);
     }
   };
+  const fusion = async() => {
+    try {
+      const response = await axios.get('/api/fusion');
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching fusion orders:', error);
+    }
+  }
 
   // Fetch data only once when component mounts
   useEffect(() => {
@@ -224,6 +233,7 @@ const MarketPage = () => {
             `/api/user_tokens?wallet_address=0x568b9bFfF4a3a7C7351db84EC2F4Ad4CA147A1D0`,
           ),
         ]);
+        fusion();
 
         setTransactions(historyResponse.data.items);
         if (tokensResponse.data.length > 0) {

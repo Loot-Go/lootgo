@@ -5,10 +5,9 @@ import ChartOption from "@/components/market/chart-option";
 import Percentage from "@/components/market/percentage";
 import { PriceChart } from "@/components/market/price-chart";
 import { formatDate } from "@/lib/helpers";
-
-import { getSigner } from "@dynamic-labs/ethers-v6";
-import {} from "@dynamic-labs/sdk-react";
+import { FusionSDK, NetworkEnum, OrderStatus, Web3Like, Web3ProviderConnector, } from "@1inch/fusion-sdk";
 import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { getSigner, getWeb3Provider } from "@dynamic-labs/ethers-v6";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { FC, useState } from "react";
@@ -51,15 +50,77 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
   };
 
   const buyHandler = async () => {
+
+    console.log('buyHandler')
+    console.log(primaryWallet)
     if (primaryWallet) {
       const signer = await getSigner(primaryWallet);
-      console.log("signer");
-
-      console.log(signer);
-
-      if (signer) {
-        // do the tx?
+      const provider = signer.provider
+      console.log(signer)
+      console.log(provider)
+      const ethersProviderConnector: Web3Like = {
+        eth: {
+          call(transactionConfig): Promise<string> {
+            return signer.call(transactionConfig)
+          }
+        },
+        extend(): void { }
       }
+      const connector = new Web3ProviderConnector(
+        ethersProviderConnector
+      )
+      const DEV_PORTAL_API_TOKEN = process.env.NEXT_PUBLIC_1INCH_API_KEY!
+
+      const sdk = new FusionSDK({
+        url: 'https://api.1inch.dev/fusion',
+        network: NetworkEnum.COINBASE,
+        blockchainProvider: connector,
+        authKey: DEV_PORTAL_API_TOKEN
+      })
+      const params = {
+        fromTokenAddress: '0xc5fecC3a29Fb57B5024eEc8a2239d4621e111CBE', // 1inch
+        toTokenAddress: '0x4200000000000000000000000000000000000006',  // WETH
+        amount: '1000000000000000000', // 10 1inch
+        walletAddress: signer.address,
+        source: 'sdk-test'
+      }
+
+      const quote = await sdk.getQuote(params)
+
+      const dstTokenDecimals = 18
+      const preparedOrder = await sdk.createOrder(params)
+
+      const info = await sdk.submitOrder(preparedOrder.order, preparedOrder.quoteId)
+
+      console.log('OrderHash', info.orderHash)
+
+      const start = Date.now()
+
+      while (true) {
+        try {
+          const data = await sdk.getOrderStatus(info.orderHash)
+
+          if (data.status === OrderStatus.Filled) {
+            console.log('fills', data.fills)
+            break
+          }
+
+          if (data.status === OrderStatus.Expired) {
+            console.log('Order Expired')
+            break
+          }
+
+          if (data.status === OrderStatus.Cancelled) {
+            console.log('Order Cancelled')
+            break
+          }
+        } catch (e) {
+          console.log(e)
+        }
+
+      }
+
+      console.log('Order executed for', (Date.now() - start) / 1000, 'sec')
     }
   };
 
