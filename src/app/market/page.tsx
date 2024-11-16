@@ -284,7 +284,7 @@ const MarketPage = () => {
 
             <div className="text-3xl font-black">$3,291</div>
 
-            <Percentage percentage="91%" />
+            <Percentage percentage="2.1%" />
 
             <Link
               href={"/deposit"}
