@@ -1,10 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Annotation, Map, Marker } from "mapkit-react";
+import { Annotation, Map } from "mapkit-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import UserLocation from "./user-location";
 
 interface MapsProps {
   token: string;
@@ -28,17 +29,12 @@ const AppleMaps: React.FC<MapsProps> = ({
   paddingBottom,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [centerCoordinates, setCenterCoordinates] = useState({
-    lat: 0,
-    lng: 0,
-  });
   const [userCoordinates, setUserCoordinates] = useState<{
     lat: number;
     lng: number;
   }>();
   const [accurateLocation, setAccurateLocation] = useState(false);
   const [cookies, setCookie] = useCookies(["user-location"]);
-  const [applyRestriction, setApplyRestriction] = useState(true);
 
   useLayoutEffect(() => {
     setMounted(true);
@@ -78,27 +74,16 @@ const AppleMaps: React.FC<MapsProps> = ({
     }
   }, [disableBodyScroll]);
 
-  useEffect(() => {
-    if (userCoordinates) {
-      setCenterCoordinates(userCoordinates);
-      setApplyRestriction(true);
-
-      const timeout = setTimeout(() => {
-        setApplyRestriction(false);
-      }, 1000);
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-  }, [userCoordinates]);
-
   const updateUserLocation = useCallback(
     (coordinates: { lat: number; lng: number }) => {
       setUserCoordinates(coordinates);
       setAccurateLocation(true);
+      setCookie("user-location", JSON.stringify(coordinates), {
+        path: "/",
+        maxAge: 60 * 60 * 24, // 24 hours
+      });
     },
-    [],
+    [setCookie],
   );
 
   return (
@@ -114,47 +99,59 @@ const AppleMaps: React.FC<MapsProps> = ({
           paddingBottom={paddingBottom ?? undefined}
           showsCompass={0}
           showsMapTypeControl={false}
-          cameraBoundary={{
-            centerLatitude: centerCoordinates.lat,
-            centerLongitude: centerCoordinates.lng,
-            latitudeDelta: applyRestriction ? 0.001 : 365,
-            longitudeDelta: applyRestriction ? 0.001 : 365,
+          initialRegion={
+            userCoordinates
+              ? {
+                  centerLatitude: userCoordinates.lat,
+                  centerLongitude: userCoordinates.lng,
+                  latitudeDelta: 0.003,
+                  longitudeDelta: 0.003,
+                }
+              : undefined
+          }
+          allowWheelToZoom
+          showsUserLocation
+          showsUserLocationControl
+          tracksUserLocation
+          onUserLocationChange={(event) => {
+            if (event.coordinate) {
+              updateUserLocation({
+                lat: event.coordinate.latitude,
+                lng: event.coordinate.longitude,
+              });
+            }
           }}
-          maxCameraDistance={
-            applyRestriction ? (enableUserLocation ? 10000 : 100000) : undefined
-          }
-          minCameraDistance={
-            applyRestriction ? (enableUserLocation ? 10000 : 100000) : undefined
-          }
         >
           {coordinatesArray
             ? coordinatesArray.map((coordinates) => (
-                <Marker
+                <Annotation
                   key={`coordinate-${JSON.stringify(coordinates)}`}
                   latitude={coordinates.lat}
                   longitude={coordinates.lng}
-                />
+                >
+                  <Link href={"/chest"}>
+                    <Image
+                      height={40}
+                      width={40}
+                      src={`/${coordinates.type}.png`}
+                      alt="box"
+                    />
+                  </Link>
+                </Annotation>
               ))
             : null}
 
-          {userCoordinates && (
+          {userCoordinates && !accurateLocation && (
             <Annotation
               latitude={userCoordinates.lat}
               longitude={userCoordinates.lng}
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white">
-                {accurateLocation ? (
-                  <div className="animate-expand-contract h-3.5 w-3.5 rounded-full bg-[#007AFF]"></div>
-                ) : (
-                  <div className="h-3.5 w-3.5 rounded-full bg-gray-500"></div>
-                )}
+                <div className="h-3.5 w-3.5 rounded-full bg-gray-500"></div>
               </div>
             </Annotation>
           )}
         </Map>
-      )}
-      {enableUserLocation && (
-        <UserLocation setUserCoordinates={updateUserLocation} />
       )}
     </div>
   );
