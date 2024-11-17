@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import CountUp from "react-countup";
-import { swap } from "./actions";
+import { swap1INCH } from "./actions";
 import OrderModal from "./orderModal";
 
 interface DetailsPageProps {
@@ -75,11 +75,22 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
 
   const buyHandler = async () => {
     console.log("buyHandler");
-    console.log(primaryWallet);
 
+    setOrderHash(undefined);
     setOpenModal(true);
 
-    const orderHash = await swap();
+    const orderHash = await swap1INCH();
+    console.log(orderHash);
+    setOrderHash(orderHash);
+  };
+
+  const sellHandler = async () => {
+    console.log("sellHandler");
+
+    setOrderHash(undefined);
+    setOpenModal(true);
+
+    const orderHash = await swap1INCH();
     console.log(orderHash);
     setOrderHash(orderHash);
   };
@@ -154,7 +165,7 @@ const DetailsPage: FC<DetailsPageProps> = ({ params }) => {
               BUY
             </button>
             <button
-              onClick={buyHandler}
+              onClick={sellHandler}
               className="flex-1 rounded-xl bg-[#F15950] px-4 py-3 font-bold"
             >
               SELL

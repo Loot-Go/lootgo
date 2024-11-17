@@ -41,12 +41,12 @@ const sdk = new FusionSDK({
   authKey: DEV_PORTAL_API_TOKEN,
 });
 
-export async function swap() {
+export async function swap1INCH() {
   const wallet = new Wallet(PRIVATE_KEY.toString().trim());
 
   const params = {
     fromTokenAddress: "0xc5fecC3a29Fb57B5024eEc8a2239d4621e111CBE", // 1inch
-    toTokenAddress: "0x4200000000000000000000000000000000000006", // WETH
+    toTokenAddress: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // USDC
     amount: "1000000000000000000", // 1 1inch
     walletAddress: wallet.address,
     source: "sdk-test",
@@ -66,6 +66,62 @@ export async function swap() {
 
     const tokenContract = new Contract(
       "0xc5fecC3a29Fb57B5024eEc8a2239d4621e111CBE",
+      ERC20_ABI,
+      signer,
+    );
+
+    const currentAllowance = await tokenContract.allowance(
+      signer.address,
+      fusionSettlementContractAddress,
+    );
+
+    if (currentAllowance < preparedOrder.order.makingAmount) {
+      const tx = await tokenContract.approve(
+        fusionSettlementContractAddress,
+        ethers.MaxUint256,
+      );
+      await tx.wait();
+    }
+
+    const info = await sdk.submitOrder(
+      preparedOrder.order,
+      preparedOrder.quoteId,
+    );
+
+    console.log("OrderHash", info.orderHash);
+
+    return info.orderHash;
+  } catch (e) {
+    console.log(e);
+    throw new Error("Error submitting order");
+  }
+}
+
+export async function swapUSDC() {
+  const wallet = new Wallet(PRIVATE_KEY.toString().trim());
+
+  const params = {
+    fromTokenAddress: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // USDC
+    toTokenAddress: "0xc5fecC3a29Fb57B5024eEc8a2239d4621e111CBE", // 1inch
+    amount: "100000", // 0.1 USDC
+    walletAddress: wallet.address,
+    source: "sdk-test",
+  };
+
+  const provider = new ethers.JsonRpcProvider(NODE_URL);
+  const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+
+  const preparedOrder = await sdk.createOrder(params);
+
+  console.log("Order created", preparedOrder);
+
+  try {
+    const fusionSettlementContract = preparedOrder.order
+      .settlementExtensionContract as unknown as { val: string };
+    const fusionSettlementContractAddress = fusionSettlementContract.val;
+
+    const tokenContract = new Contract(
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
       ERC20_ABI,
       signer,
     );
